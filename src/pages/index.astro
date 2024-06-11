@@ -1,0 +1,74 @@
+---
+import Button from "../components/Button.astro";
+---
+<script>
+    const selectableTexts = [
+        {text: "and in that light, I find deliverance.", possibility: 0.8},
+        {text: "我的终点比星辰更远。", possibility: 0.1},
+        {text: "我们只在乎这一切是否值得。", possibility: 0.1}
+    ];
+    let text: string | null = null;
+    for (let x of selectableTexts) {
+        if (Math.random() < x.possibility) {
+            text = x.text
+            break
+        }
+    }
+    if (text == null) text = selectableTexts[0].text;
+    let now = new Date().getHours();
+    if (now >= 18 || now <= 6) {
+        document.documentElement.classList.add("dark")
+    }
+    document.addEventListener('DOMContentLoaded', async function () {
+        var pointer = 0;
+        var extraCounter = 0;
+        let intervalId = setInterval(function(){
+            if(extraCounter > 0){
+                extraCounter--;
+                return
+            }
+            if(text.length - 1 >= pointer) {
+                document.getElementById("slogan").innerHTML += text.charAt(pointer++)
+                if(text.charAt(pointer) == ','){
+                    extraCounter=20;
+                }
+            }else{
+                clearInterval(intervalId)
+            }
+        },100)
+    })
+    document.addEventListener('keydown', function(event){
+        if(event.key.toLowerCase() == 'b'){
+            // is dark mode?
+            const darkMode = document.documentElement.classList.contains("dark");
+            document.documentElement.classList[darkMode? "remove" : "add"]('dark');
+        }
+    })
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap"
+      rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Tiny5&display=swap" rel="stylesheet">
+<div class="flex justify-center items-center h-screen dark:bg-slate-800"> <!--  bg-gray-800 -->
+    <div class="flex flex-row items-center">
+        <img src="https://avatars.githubusercontent.com/u/48877375" alt="avatar"
+             class="rounded-full size-48 border-blue-400 border-2 hover:shadow-2xl transition-all dark:hover:shadow-slate-600">
+        <div class="flex flex-col pl-4">
+            <p class="text-2xl dark:text-3xl dark:text-sky-400 dark:font-iceland">iceBear67</p>
+            <div class="flex flex-row">
+                <p class="italic text-gray-600 dark:text-gray-500" id="slogan"></p>
+                <p class="animate-handTyped text-gray-600 dark:text-gray-500">_</p>
+            </div>
+            <div class="border-2 mt-3 dark:border-gray-500"/>
+            <div class="flex flex-row">
+                <Button text="blog" url="https://blog.0w0.ing"></Button>
+                <Button text="github" url="https://github.com/iceBear67"></Button>
+                <Button text="telegram" url="https://t.me/ib67_pm_bot"></Button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
